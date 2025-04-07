@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
       leftSection.insertBefore(listBox, newProjectButton);
 
       // Activate this list box (simulate a click)
-      listBox.click();
+      listBox.querySelector(".list-box").click();
 
       // Clear the input for next time
       listDialog.querySelector("input").value = "";

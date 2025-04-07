@@ -54,8 +54,44 @@ export function createDialog() {
 
 export function createListBox(listName, rightSection) {
   const listBox = document.createElement("div");
-  listBox.textContent = listName;
-  listBox.className = "list-box";
+  listBox.className = "list-box-container";
+
+  // Create the actual list box for the name
+  const nameBox = document.createElement("div");
+  nameBox.textContent = listName;
+  nameBox.className = "list-box";
+  listBox.appendChild(nameBox);
+
+  // Create delete button
+  const deleteButton = document.createElement("button");
+  deleteButton.textContent = "×";
+  deleteButton.className = "delete-list-button";
+  deleteButton.title = "Delete list";
+  deleteButton.addEventListener("click", (e) => {
+    e.stopPropagation(); // Prevent triggering the list box click
+
+    // Confirm before deleting
+    if (confirm(`Are you sure you want to delete the list "${listName}"?`)) {
+      // Remove the tab associated with this list
+      const tabId = `tab-${listName.replace(/\s+/g, "-").toLowerCase()}`;
+      const tab = document.getElementById(tabId);
+      if (tab) {
+        tab.remove();
+      }
+
+      // Remove the list box itself
+      listBox.remove();
+
+      // If this was the active list, show another list if available
+      if (nameBox.classList.contains("active")) {
+        const firstListBox = document.querySelector(".list-box");
+        if (firstListBox) {
+          firstListBox.click();
+        }
+      }
+    }
+  });
+  listBox.appendChild(deleteButton);
 
   // Create a unique ID for the tab
   const tabId = `tab-${listName.replace(/\s+/g, "-").toLowerCase()}`;
@@ -66,15 +102,15 @@ export function createListBox(listName, rightSection) {
     rightSection.appendChild(tab);
   }
 
-  // Set up click event to switch tabs
-  listBox.addEventListener("click", () => {
+  // Set up click event to switch tabs (now on the nameBox)
+  nameBox.addEventListener("click", () => {
     // Remove active class from all list boxes
     document.querySelectorAll(".list-box").forEach((box) => {
       box.classList.remove("active");
     });
 
     // Add active class to this list box
-    listBox.classList.add("active");
+    nameBox.classList.add("active");
 
     // Show this tab
     showTab(tabId);
