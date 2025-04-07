@@ -1,4 +1,3 @@
-// src/modules/todoLists.js
 import { createListTab, showTab, createTaskDialog } from "./tasks.js";
 
 export function createNewProjectButton() {
@@ -26,13 +25,28 @@ export function createDialog() {
 
   const cancelButton = document.createElement("button");
   cancelButton.textContent = "Cancel";
-  cancelButton.value = "cancel";
+  cancelButton.type = "button";
+  // Add event listener to clear form and close dialog
+  cancelButton.addEventListener("click", () => {
+    form.reset();
+    dialog.close("cancel");
+  });
   form.appendChild(cancelButton);
 
   const submitButton = document.createElement("button");
   submitButton.textContent = "Submit";
-  submitButton.value = "submit";
+  submitButton.type = "submit";
   form.appendChild(submitButton);
+
+  // Add form submit event listener for validation
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (input.value.trim() !== "") {
+      dialog.close("submit");
+    } else {
+      alert("Please enter a list name");
+    }
+  });
 
   dialog.appendChild(form);
   return dialog;

@@ -131,6 +131,14 @@ body {
     margin-top: 5px;
   }
 
+  .task-date {
+    margin-left: 27px;
+    padding: 5px 0 2px 0;
+    color: #555;
+    font-size: 0.85em;
+    font-weight: bold;
+  }  
+
   .task-item {
     display: flex;
     flex-direction: column;
@@ -185,6 +193,12 @@ body {
     border-radius: 5px;
     padding: 20px;
     width: 400px;
+  }
+
+  .new-task-dialog input[type="date"] {
+    padding: 8px;
+    margin: 5px 0;
+    width: 95%;
   }
   
   .new-task-dialog form {

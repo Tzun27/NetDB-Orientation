@@ -1,4 +1,4 @@
-// src/modules/tasks.js
+import { format } from "date-fns";
 
 // Create the new task button
 export function createNewTaskButton() {
@@ -24,7 +24,7 @@ export function createTaskDialog() {
   const nameInput = document.createElement("input");
   nameInput.type = "text";
   nameInput.name = "taskName";
-  nameInput.required = true;
+  //nameInput.required = true;
   form.appendChild(nameInput);
 
   // Task description input
@@ -36,6 +36,17 @@ export function createTaskDialog() {
   descInput.name = "taskDescription";
   descInput.rows = 3;
   form.appendChild(descInput);
+
+  // Date input
+  const dateLabel = document.createElement("label");
+  dateLabel.textContent = "Due Date:";
+  form.appendChild(dateLabel);
+
+  const dateInput = document.createElement("input");
+  dateInput.type = "date";
+  dateInput.name = "taskDate";
+  dateInput.value = new Date().toISOString().split("T")[0]; // Set default to today
+  form.appendChild(dateInput);
 
   // Priority dropdown
   const priorityLabel = document.createElement("label");
@@ -66,15 +77,30 @@ export function createTaskDialog() {
 
   const cancelButton = document.createElement("button");
   cancelButton.textContent = "Cancel";
-  cancelButton.value = "cancel";
+  cancelButton.type = "button"; // Change to type="button"
+  cancelButton.addEventListener("click", () => {
+    form.reset();
+    dialog.close("cancel");
+  });
   buttonContainer.appendChild(cancelButton);
 
   const submitButton = document.createElement("button");
   submitButton.textContent = "Submit";
-  submitButton.value = "submit";
+  submitButton.type = "submit"; // Change to type="submit"
   buttonContainer.appendChild(submitButton);
 
   form.appendChild(buttonContainer);
+
+  // Add form submit event listener
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (nameInput.value.trim() !== "") {
+      dialog.close("submit");
+    } else {
+      alert("Please enter a task name");
+    }
+  });
+
   dialog.appendChild(form);
   return dialog;
 }
@@ -124,6 +150,18 @@ export function createTaskItem(taskData) {
     descriptionElement.className = "task-description";
     descriptionElement.textContent = taskData.description;
     taskItem.appendChild(descriptionElement);
+  }
+
+  // Add due date if it exists
+  if (taskData.date) {
+    const dateElement = document.createElement("div");
+    dateElement.className = "task-date";
+    const formattedDate = format(
+      new Date(taskData.date),
+      "EEEE, MMMM do, yyyy"
+    );
+    dateElement.textContent = `Due: ${formattedDate}`;
+    taskItem.appendChild(dateElement);
   }
 
   return taskItem;

@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  /* List of todos functions */
+  /* Todo tasks functions */
 
   // Set up event delegation for "New Task" buttons
   rightSection.addEventListener("click", (e) => {
@@ -91,6 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const taskData = {
           name: taskName,
           description: form.taskDescription.value,
+          date: form.taskDate.value,
           priority: form.taskPriority.value,
         };
 
