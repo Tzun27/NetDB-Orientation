@@ -1,4 +1,5 @@
 import { createListTab, showTab, createTaskDialog } from "./tasks.js";
+import { storage } from "./storage.js";
 
 export function createNewProjectButton() {
   const newProjectButton = document.createElement("button");
@@ -89,6 +90,9 @@ export function createListBox(listName, rightSection) {
           firstListBox.click();
         }
       }
+
+      // Save to local storage after deletion
+      storage.saveLists();
     }
   });
   listBox.appendChild(deleteButton);

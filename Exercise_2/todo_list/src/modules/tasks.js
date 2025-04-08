@@ -1,4 +1,5 @@
-import { format } from "date-fns";
+import { format, parse, isValid } from "date-fns";
+import { storage } from "./storage.js";
 
 // Create the new task button
 export function createNewTaskButton() {
@@ -138,6 +139,7 @@ export function createTaskItem(taskData) {
   deleteButton.addEventListener("click", (e) => {
     e.stopPropagation();
     taskItem.remove();
+    storage.saveLists();
   });
   taskRow.appendChild(deleteButton);
 
@@ -156,10 +158,26 @@ export function createTaskItem(taskData) {
   if (taskData.date) {
     const dateElement = document.createElement("div");
     dateElement.className = "task-date";
-    const formattedDate = format(
-      new Date(taskData.date),
-      "EEEE, MMMM do, yyyy"
-    );
+    
+    let formattedDate;
+    try {
+      // First try to parse as ISO date string (from new task creation)
+      const date = new Date(taskData.date);
+      if (isValid(date)) {
+        formattedDate = format(date, "EEEE, MMMM do, yyyy");
+      } else {
+        // If that fails, try to parse the stored formatted date string
+        const parsedDate = parse(taskData.date, "EEEE, MMMM do, yyyy", new Date());
+        if (isValid(parsedDate)) {
+          formattedDate = format(parsedDate, "EEEE, MMMM do, yyyy");
+        } else {
+          formattedDate = "Invalid Date";
+        }
+      }
+    } catch (error) {
+      formattedDate = "Invalid Date";
+    }
+    
     dateElement.textContent = `Due: ${formattedDate}`;
     taskItem.appendChild(dateElement);
   }

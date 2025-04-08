@@ -5,6 +5,7 @@ import {
   createListBox,
 } from "./modules/todoLists.js";
 import { createTaskDialog, createTaskItem } from "./modules/tasks.js";
+import { storage } from "./modules/storage.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const app = document.getElementById("app");
@@ -64,6 +65,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Clear the input for next time
       listDialog.querySelector("input").value = "";
+
+      // Save to local storage
+      storage.saveLists();
     }
   });
 
@@ -108,7 +112,51 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Reset the form
         form.reset();
+        form.taskDate.value = new Date().toISOString().split("T")[0];
+
+        // Save to local storage
+        storage.saveLists();
       }
     }
   });
+
+  // Set up event delegation for task checkboxes and delete buttons
+  rightSection.addEventListener("change", (e) => {
+    if (e.target.classList.contains("task-checkbox")) {
+      storage.saveLists();
+    }
+  });
+
+  rightSection.addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete-task-button")) {
+      storage.saveLists();
+    }
+  });
+
+  // Load saved lists and tasks
+  const savedLists = storage.loadLists();
+  savedLists.forEach(list => {
+    // Create list box
+    const listBox = createListBox(list.name, rightSection);
+    leftSection.insertBefore(listBox, newProjectButton);
+
+    // Create tasks for this list
+    const tabId = `tab-${list.name.replace(/\s+/g, "-").toLowerCase()}`;
+    const tab = document.getElementById(tabId);
+    const taskContainer = tab.querySelector(".task-container");
+
+    list.tasks.forEach(taskData => {
+      const taskItem = createTaskItem(taskData);
+      if (taskData.completed) {
+        taskItem.querySelector(".task-checkbox").checked = true;
+      }
+      taskContainer.appendChild(taskItem);
+    });
+  });
+
+  // Activate the first list if there are any
+  const firstListBox = document.querySelector(".list-box");
+  if (firstListBox) {
+    firstListBox.click();
+  }
 });
