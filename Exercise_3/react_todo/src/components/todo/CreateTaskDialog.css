@@ -1,8 +1,9 @@
-.create-todo-dialog {
+.create-task-dialog {
     border: none;
     border-radius: 8px;
     padding: 0;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    min-width: 400px;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -23,17 +24,35 @@
     font-size: 1.25rem;
 }
 
-.dialog-form input {
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
     padding: 0.5rem;
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 1rem;
 }
 
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
 .dialog-buttons {
     display: flex;
     justify-content: flex-end;
     gap: 0.5rem;
+    margin-top: 1rem;
 }
 
 .dialog-buttons button {

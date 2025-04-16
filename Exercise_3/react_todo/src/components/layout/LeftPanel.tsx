@@ -1,47 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './LeftPanel.css';
 import CreateTodoListDialog from '../todo/CreateTodoListDialog';
 import TodoListItem from '../todo/TodoListItem';
-import { saveTodoLists, loadTodoLists } from '../../utils/storage';
+import { TodoList } from '../../utils/storage';
 
-interface TodoList {
-    id: string;
-    name: string;
+interface LeftPanelProps {
+    selectedListId: string | null;
+    onSelectList: (id: string | null) => void;
+    todoLists: TodoList[];
+    setTodoLists: (lists: TodoList[]) => void;
 }
 
-const LeftPanel: React.FC = () => {
-    // Initialize state with loaded data
-    const [todoLists, setTodoLists] = useState<TodoList[]>(() => {
-        const initialLists = loadTodoLists();
-        console.log('Initializing state with:', initialLists);
-        return initialLists;
-    });
-
+const LeftPanel: React.FC<LeftPanelProps> = ({
+    selectedListId,
+    onSelectList,
+    todoLists,
+    setTodoLists
+}) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [selectedListId, setSelectedListId] = useState<string | null>(null);
-
-    // Save todo lists to local storage whenever they change
-    useEffect(() => {
-        console.log('Todo lists changed, saving:', todoLists);
-        saveTodoLists(todoLists);
-    }, [todoLists]);
 
     const handleCreateList = (listName: string) => {
         const newList: TodoList = {
             id: Date.now().toString(),
-            name: listName
+            name: listName,
+            tasks: []
         };
-        setTodoLists(prevLists => [...prevLists, newList]);
+        setTodoLists([...todoLists, newList]);
     };
 
     const handleDeleteList = (listId: string) => {
-        setTodoLists(prevLists => {
-            const newLists = prevLists.filter(list => list.id !== listId);
-            console.log('Deleting list, new state:', newLists);
-            return newLists;
-        });
+        setTodoLists(todoLists.filter(list => list.id !== listId));
         if (selectedListId === listId) {
-            setSelectedListId(null);
+            onSelectList(null);
         }
     };
 
@@ -53,7 +43,7 @@ const LeftPanel: React.FC = () => {
                         key={list.id}
                         name={list.name}
                         isSelected={list.id === selectedListId}
-                        onClick={() => setSelectedListId(list.id)}
+                        onClick={() => onSelectList(list.id)}
                         onDelete={() => handleDeleteList(list.id)}
                     />
                 ))}
