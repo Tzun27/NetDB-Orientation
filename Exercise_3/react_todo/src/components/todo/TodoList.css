@@ -1,59 +1,43 @@
-.task-item {
+.todo-list {
     background-color: white;
     border-radius: 8px;
     padding: 15px;
     margin-bottom: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.task-item:hover {
+.todo-list:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.task-item.completed {
-    opacity: 0.7;
-    background-color: #f8f9fa;
+.todo-list.selected {
+    background-color: #e3f2fd;
+    border-left: 4px solid #2196f3;
 }
 
-.task-item.completed .task-name {
-    text-decoration: line-through;
-}
-
-.task-header {
+.list-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
 }
 
-.task-header input[type="checkbox"] {
-    width: 1.25rem;
-    height: 1.25rem;
-    cursor: pointer;
-}
-
-.priority-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    margin-right: 10px;
-}
-
-.task-name {
-    flex: 1;
+.list-name {
     font-weight: 500;
     font-size: 16px;
+    color: #333;
 }
 
-.task-actions {
+.list-actions {
     display: flex;
     gap: 8px;
 }
 
-.edit-task-button,
-.delete-task-button {
+.edit-list-button,
+.delete-list-button {
     background: none;
     border: none;
     color: #666;
@@ -65,26 +49,17 @@
     transition: opacity 0.2s, color 0.2s;
 }
 
-.edit-task-button:hover {
+.edit-list-button:hover {
     opacity: 1;
     color: #007bff;
 }
 
-.delete-task-button:hover {
+.delete-list-button:hover {
     opacity: 1;
     color: #dc3545;
 }
 
-.task-details {
+.task-count {
     color: #666;
     font-size: 14px;
-}
-
-.deadline {
-    color: #6c757d;
-    font-size: 12px;
-}
-
-.description {
-    margin-bottom: 5px;
 }

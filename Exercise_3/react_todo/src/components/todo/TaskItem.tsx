@@ -7,9 +7,10 @@ interface TaskItemProps {
     task: Task;
     onToggleComplete: () => void;
     onDelete: () => void;
+    onEdit: () => void;
 }
 
-const TaskItem: React.FC<TaskItemProps> = ({ task, onToggleComplete, onDelete }) => {
+const TaskItem: React.FC<TaskItemProps> = ({ task, onToggleComplete, onDelete, onEdit }) => {
     const getPriorityColor = (priority: Task['priority']) => {
         switch (priority) {
             case 'high': return '#dc3545';
@@ -24,8 +25,13 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onToggleComplete, onDelete })
         onDelete();
     };
 
+    const handleEdit = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        onEdit();
+    };
+
     return (
-        <div className={`task-item ${task.completed ? 'completed' : ''}`}>
+        <div className={`task-item ${task.completed ? 'completed' : ''}`} onClick={onToggleComplete}>
             <div className="task-header">
                 <input
                     type="checkbox"
@@ -37,13 +43,18 @@ const TaskItem: React.FC<TaskItemProps> = ({ task, onToggleComplete, onDelete })
                     style={{ backgroundColor: getPriorityColor(task.priority) }}
                 />
                 <span className="task-name">{task.name}</span>
-                <button
-                    className="delete-task-button"
-                    onClick={handleDelete}
-                    title="Delete task"
-                >
-                    ×
-                </button>
+                <div className="task-actions">
+                    <button className="edit-task-button" onClick={handleEdit}>
+                        ✎
+                    </button>
+                    <button
+                        className="delete-task-button"
+                        onClick={handleDelete}
+                        title="Delete task"
+                    >
+                        ×
+                    </button>
+                </div>
             </div>
             <div className="task-details">
                 <div className="deadline">

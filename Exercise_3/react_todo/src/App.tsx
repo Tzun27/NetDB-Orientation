@@ -24,9 +24,21 @@ function App() {
   const selectedList = todoLists.find(list => list.id === selectedListId) || null;
 
   const handleUpdateList = (updatedList: TodoList) => {
-    setTodoLists(prevLists =>
-      prevLists.map(list => list.id === updatedList.id ? updatedList : list)
-    );
+    setTodoLists(prevLists => {
+      const exists = prevLists.some(list => list.id === updatedList.id);
+      if (exists) {
+        return prevLists.map(list => list.id === updatedList.id ? updatedList : list);
+      } else {
+        return [...prevLists, updatedList];
+      }
+    });
+  };
+
+  const handleDeleteList = (listId: string) => {
+    setTodoLists(prevLists => prevLists.filter(list => list.id !== listId));
+    if (selectedListId === listId) {
+      setSelectedListId(null);
+    }
   };
 
   return (
@@ -34,10 +46,11 @@ function App() {
       <Banner />
       <div className="content-container">
         <LeftPanel
+          lists={todoLists}
           selectedListId={selectedListId}
           onSelectList={setSelectedListId}
-          todoLists={todoLists}
-          setTodoLists={setTodoLists}
+          onUpdateList={handleUpdateList}
+          onDeleteList={handleDeleteList}
         />
         <RightPanel
           selectedList={selectedList}

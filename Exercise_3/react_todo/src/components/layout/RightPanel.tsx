@@ -11,6 +11,7 @@ interface RightPanelProps {
 
 const RightPanel: React.FC<RightPanelProps> = ({ selectedList, onUpdateList }) => {
     const [isCreateTaskDialogOpen, setIsCreateTaskDialogOpen] = useState(false);
+    const [editingTask, setEditingTask] = useState<Task | null>(null);
 
     const handleCreateTask = (taskData: {
         name: string;
@@ -31,6 +32,30 @@ const RightPanel: React.FC<RightPanelProps> = ({ selectedList, onUpdateList }) =
             };
 
             onUpdateList(updatedList);
+        }
+    };
+
+    const handleEditTask = (taskData: {
+        name: string;
+        description: string;
+        deadline: Date;
+        priority: 'high' | 'medium' | 'low';
+    }) => {
+        if (selectedList && editingTask) {
+            const updatedTask: Task = {
+                ...editingTask,
+                ...taskData
+            };
+
+            const updatedList = {
+                ...selectedList,
+                tasks: selectedList.tasks.map(task =>
+                    task.id === editingTask.id ? updatedTask : task
+                )
+            };
+
+            onUpdateList(updatedList);
+            setEditingTask(null);
         }
     };
 
@@ -116,6 +141,7 @@ const RightPanel: React.FC<RightPanelProps> = ({ selectedList, onUpdateList }) =
                                 task={task}
                                 onToggleComplete={() => handleToggleTaskComplete(task.id)}
                                 onDelete={() => handleDeleteTask(task.id)}
+                                onEdit={() => setEditingTask(task)}
                             />
                         ))}
                     </div>
@@ -125,6 +151,20 @@ const RightPanel: React.FC<RightPanelProps> = ({ selectedList, onUpdateList }) =
                         onClose={() => setIsCreateTaskDialogOpen(false)}
                         onSubmit={handleCreateTask}
                     />
+
+                    {editingTask && (
+                        <CreateTaskDialog
+                            isOpen={true}
+                            onClose={() => setEditingTask(null)}
+                            onSubmit={handleEditTask}
+                            initialData={{
+                                name: editingTask.name,
+                                description: editingTask.description,
+                                deadline: editingTask.deadline,
+                                priority: editingTask.priority
+                            }}
+                        />
+                    )}
                 </>
             ) : (
                 <div className="no-list-selected">

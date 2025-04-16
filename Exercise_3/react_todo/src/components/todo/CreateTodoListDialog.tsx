@@ -4,47 +4,65 @@ import './CreateTodoListDialog.css';
 interface CreateTodoListDialogProps {
     isOpen: boolean;
     onClose: () => void;
-    onSubmit: (listName: string) => void;
+    onSubmit: (name: string) => void;
+    initialName?: string;
 }
 
-const CreateTodoListDialog: React.FC<CreateTodoListDialogProps> = ({ isOpen, onClose, onSubmit }) => {
-    const [listName, setListName] = useState('');
+const CreateTodoListDialog: React.FC<CreateTodoListDialogProps> = ({
+    isOpen,
+    onClose,
+    onSubmit,
+    initialName = ''
+}) => {
+    const [name, setName] = useState(initialName);
 
-    // Clear the input field when the dialog is closed
     useEffect(() => {
-        if (!isOpen) {
-            setListName('');
-        }
-    }, [isOpen]);
+        setName(initialName);
+    }, [initialName]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (listName.trim()) {
-            onSubmit(listName.trim());
-            setListName('');
+        if (name.trim()) {
+            onSubmit(name.trim());
+            setName('');
             onClose();
         }
+    };
+
+    const handleClose = () => {
+        setName('');
+        onClose();
     };
 
     if (!isOpen) return null;
 
     return (
-        <dialog className="create-todo-dialog" open>
-            <form onSubmit={handleSubmit} className="dialog-form">
-                <h2>Create New Todo List</h2>
-                <input
-                    type="text"
-                    value={listName}
-                    onChange={(e) => setListName(e.target.value)}
-                    placeholder="Enter list name"
-                    required
-                />
-                <div className="dialog-buttons">
-                    <button type="button" onClick={onClose}>Cancel</button>
-                    <button type="submit">Create</button>
-                </div>
-            </form>
-        </dialog>
+        <div className="dialog-overlay">
+            <div className="dialog-content">
+                <h2>{initialName ? 'Edit List' : 'Create New List'}</h2>
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label htmlFor="name">List Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div className="dialog-actions">
+                        <button type="button" onClick={handleClose}>
+                            Cancel
+                        </button>
+                        <button type="submit">
+                            {initialName ? 'Save Changes' : 'Create List'}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     );
 };
 
