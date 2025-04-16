@@ -3,4 +3,32 @@
     background-color: #f8f8f8;
     border-right: 1px solid #ddd;
     padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.create-list-button {
+    padding: 0.75rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+    margin-top: auto;
+}
+
+.create-list-button:hover {
+    background-color: #0056b3;
+}
+
+.todo-lists {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    overflow-y: auto;
+    flex: 1;
+    margin-bottom: 1rem;
 }
