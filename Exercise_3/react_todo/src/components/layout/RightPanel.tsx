@@ -60,18 +60,53 @@ const RightPanel: React.FC<RightPanelProps> = ({ selectedList, onUpdateList }) =
         }
     };
 
+    const handleBoredClick = async () => {
+        try {
+            const response = await fetch('https://bored.api.lewagon.com/api/activity');
+            const data = await response.json();
+
+            if (selectedList && data.activity) {
+                const newTask: Task = {
+                    id: Date.now().toString(),
+                    name: data.activity,
+                    description: 'Generated from Bored API',
+                    deadline: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
+                    priority: 'medium',
+                    completed: false
+                };
+
+                const updatedList = {
+                    ...selectedList,
+                    tasks: [...selectedList.tasks, newTask]
+                };
+
+                onUpdateList(updatedList);
+            }
+        } catch (error) {
+            console.error('Error fetching activity:', error);
+        }
+    };
+
     return (
         <div className="right-panel">
             {selectedList ? (
                 <>
                     <div className="panel-header">
                         <h2>{selectedList.name}</h2>
-                        <button
-                            className="create-task-button"
-                            onClick={() => setIsCreateTaskDialogOpen(true)}
-                        >
-                            Create Task
-                        </button>
+                        <div className="button-group">
+                            <button
+                                className="bored-button"
+                                onClick={handleBoredClick}
+                            >
+                                Bored
+                            </button>
+                            <button
+                                className="create-task-button"
+                                onClick={() => setIsCreateTaskDialogOpen(true)}
+                            >
+                                Create Task
+                            </button>
+                        </div>
                     </div>
 
                     <div className="tasks-container">
