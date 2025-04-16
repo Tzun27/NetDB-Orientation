@@ -1,3 +1,25 @@
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
 .task-item {
     background-color: #ffffff;
     border-radius: 8px;
@@ -5,8 +27,30 @@
     margin-bottom: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     border: 1px solid #f0f0f0;
+    animation: slideIn 0.3s ease-out forwards;
+    opacity: 0;
+}
+
+.task-item:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.task-item:nth-child(2) {
+    animation-delay: 0.15s;
+}
+
+.task-item:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.task-item:nth-child(4) {
+    animation-delay: 0.25s;
+}
+
+.task-item:nth-child(5) {
+    animation-delay: 0.3s;
 }
 
 .task-item:hover {
@@ -18,11 +62,13 @@
 .task-item.completed {
     opacity: 0.7;
     background-color: #fafafa;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
 }
 
 .task-item.completed .task-name {
     text-decoration: line-through;
     color: #888888;
+    transition: color 0.3s ease;
 }
 
 .task-header {
@@ -30,6 +76,7 @@
     align-items: center;
     margin-bottom: 10px;
     gap: 1rem;
+    animation: fadeIn 0.4s ease-out forwards;
 }
 
 .task-header input[type="checkbox"] {
@@ -38,6 +85,11 @@
     cursor: pointer;
     margin-right: 0.5rem;
     accent-color: #4a90e2;
+    transition: transform 0.2s ease;
+}
+
+.task-header input[type="checkbox"]:checked {
+    transform: scale(1.1);
 }
 
 .priority-dot {
@@ -45,6 +97,11 @@
     height: 8px;
     border-radius: 50%;
     margin-right: 0.5rem;
+    transition: transform 0.2s ease;
+}
+
+.task-item:hover .priority-dot {
+    transform: scale(1.2);
 }
 
 .task-name {
@@ -52,11 +109,18 @@
     font-weight: 500;
     font-size: 16px;
     color: #2c3e50;
+    transition: color 0.2s ease;
 }
 
 .task-actions {
     display: flex;
     gap: 8px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.task-item:hover .task-actions {
+    opacity: 1;
 }
 
 .edit-task-button,
@@ -69,30 +133,36 @@
     padding: 0 0.25rem;
     line-height: 1;
     opacity: 0.7;
-    transition: opacity 0.2s, color 0.2s;
+    transition: all 0.2s ease;
+    transform: scale(1);
 }
 
 .edit-task-button:hover {
     opacity: 1;
     color: #3498db;
+    transform: scale(1.1);
 }
 
 .delete-task-button:hover {
     opacity: 1;
     color: #e74c3c;
+    transform: scale(1.1);
 }
 
 .task-details {
     color: #7f8c8d;
     font-size: 14px;
+    animation: fadeIn 0.5s ease-out forwards;
 }
 
 .deadline {
     color: #95a5a6;
     font-size: 12px;
+    transition: color 0.2s ease;
 }
 
 .description {
     margin-bottom: 5px;
     color: #34495e;
+    transition: color 0.2s ease;
 }
