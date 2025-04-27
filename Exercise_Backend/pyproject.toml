@@ -1,16 +1,17 @@
-[project]
+[tool.poetry]
 name = "exercise-backend"
 version = "0.1.0"
 description = ""
-authors = [
-    {name = "Tzun",email = "chaotzun@gmail.com"}
-]
+authors = ["Tzun27 <chaotzun@gmail.com>"]
 readme = "README.md"
-requires-python = ">=3.10"
-dependencies = [
-]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+alembic = "^1.15.2"
+fastapi = "^0.115.12"
+sqlalchemy = "^2.0.40"
 
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
