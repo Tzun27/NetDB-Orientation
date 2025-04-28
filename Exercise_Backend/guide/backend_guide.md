@@ -397,5 +397,3 @@ You've built a secure, modern backend with FastAPI, PostgreSQL, and JWT authenti
 - Implement JWT authentication
 - Protect endpoints
 - Test your API
-
-If you have any questions or want to add more features, just ask. Happy coding! 🚀
