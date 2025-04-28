@@ -5,6 +5,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
 import hashlib
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.database.config import SessionLocal
 from app.models.user import User
@@ -13,6 +14,15 @@ from app.auth.dependencies import get_current_user
 
 # Create FastAPI app
 app = FastAPI()
+
+# Add CORS middleware to allow frontend to access backend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Dependency to get DB session
 def get_db():

@@ -206,6 +206,16 @@ from app.auth.dependencies import get_current_user
 
 app = FastAPI()
 
+# Add CORS middleware to allow frontend to access backend
+from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 def get_db():
     db = SessionLocal()
     try:
@@ -216,6 +226,21 @@ def get_db():
 **Explanation:**
 - Imports all necessary modules.
 - `get_db()` provides a database session for each request.
+
+# Add CORS middleware to allow frontend to access backend
+from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+**Explanation:**
+- **What is CORS?** CORS (Cross-Origin Resource Sharing) is a security feature in browsers that blocks web pages from making requests to a different domain or port than the one that served the web page, unless the server explicitly allows it.
+- **Why do you need it?** When your React frontend runs on `localhost:3000` and your FastAPI backend runs on `localhost:8000`, the browser considers these different origins. Without CORS, your frontend cannot communicate with your backend.
+- **How does this code help?** The `CORSMiddleware` tells FastAPI to allow requests from your frontend's origin (`http://localhost:3000`), so your browser will let the frontend talk to the backend without errors.
 
 ---
 
@@ -397,3 +422,6 @@ You've built a secure, modern backend with FastAPI, PostgreSQL, and JWT authenti
 - Implement JWT authentication
 - Protect endpoints
 - Test your API
+
+**Explanation:**
+- The CORS middleware allows your React frontend (running on http://localhost:3000) to make requests to your FastAPI backend without running into CORS errors in the browser.
