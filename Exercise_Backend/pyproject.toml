@@ -11,6 +11,10 @@ alembic = "^1.15.2"
 fastapi = "^0.115.12"
 sqlalchemy = "^2.0.40"
 psycopg2-binary = "^2.9.10"
+python-jose = {extras = ["cryptography"], version = "^3.4.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
+python-multipart = "^0.0.20"
+uvicorn = "^0.34.2"
 
 
 [build-system]
