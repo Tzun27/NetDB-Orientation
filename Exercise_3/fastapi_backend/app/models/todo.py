@@ -11,13 +11,13 @@ class PriorityEnum(str, PyEnum):
     LOW = "low"
 
 class TodoList(Base):
-    __tablename__ = "todo_lists"
+    __tablename__ = "projects"
 
     id = Column(String, primary_key=True, index=True)
     name = Column(String, nullable=False)
     
     # Relationship with Task model
-    tasks = relationship("Task", back_populates="todo_list", cascade="all, delete-orphan")
+    tasks = relationship("Task", back_populates="project", cascade="all, delete-orphan")
 
 class Task(Base):
     __tablename__ = "tasks"
@@ -29,6 +29,6 @@ class Task(Base):
     priority = Column(Enum(PriorityEnum), nullable=False)
     completed = Column(Boolean, default=False)
     
-    # Foreign key to TodoList
-    todo_list_id = Column(String, ForeignKey("todo_lists.id"), nullable=False)
-    todo_list = relationship("TodoList", back_populates="tasks") 
+    # Foreign key to Project
+    project_id = Column(String, ForeignKey("projects.id"), nullable=False)
+    project = relationship("TodoList", back_populates="tasks") 
