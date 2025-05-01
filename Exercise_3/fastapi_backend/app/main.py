@@ -41,6 +41,13 @@ def delete_project(project_id: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Project not found")
     return {"message": "Project deleted successfully"}
 
+@app.patch("/projects/{project_id}", response_model=Project)
+def update_project(project_id: str, project_update: dict, db: Session = Depends(get_db)):
+    db_project = crud.update_project(db, project_id=project_id, project_data=project_update)
+    if db_project is None:
+        raise HTTPException(status_code=404, detail="Project not found")
+    return db_project
+
 # Task endpoints
 @app.post("/projects/{project_id}/tasks/", response_model=Task, status_code=status.HTTP_201_CREATED)
 def create_task(project_id: str, task: TaskCreate, db: Session = Depends(get_db)):

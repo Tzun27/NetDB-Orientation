@@ -17,6 +17,15 @@ def create_project(db: Session, project: ProjectCreate):
     db.refresh(db_project)
     return db_project
 
+def update_project(db: Session, project_id: str, project_data: dict):
+    db_project = db.query(Project).filter(Project.id == project_id).first()
+    if db_project:
+        for key, value in project_data.items():
+            setattr(db_project, key, value)
+        db.commit()
+        db.refresh(db_project)
+    return db_project
+
 def delete_project(db: Session, project_id: str):
     db_project = db.query(Project).filter(Project.id == project_id).first()
     if db_project:
